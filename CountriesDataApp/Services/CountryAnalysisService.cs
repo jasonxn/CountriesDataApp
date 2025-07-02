@@ -13,24 +13,40 @@ namespace CountriesDataApp.Services
     {
         private readonly ICountryService _countryService;
         private readonly IEnumerable<ICountryAnalyzer> _analyzers;
+        private readonly ILogger<CountryAnalysisService> _logger;
 
-        public CountryAnalysisService(ICountryService countryService, IEnumerable<ICountryAnalyzer> analyzers)
+        public CountryAnalysisService(ICountryService countryService, IEnumerable<ICountryAnalyzer> analyzers, ILogger<CountryAnalysisService> logger)
         {
             _countryService = countryService;
             _analyzers = analyzers;
+            _logger = logger;
+            Console.WriteLine("CountryAnalysisService instantiated writeline"); 
+            _logger.LogInformation("CountryAnalysisService instantiated loginformation");
+
         }
 
 
         public async Task AnalyzeCountriesAsync(CancellationToken cancellationToken = default)
         {
-            var countries = await _countryService.GetAllCountriesAsync(cancellationToken);
+            var countries = await _countryService.GetAllCountriesAsync(cancellationToken).ConfigureAwait(false);
 
             Console.WriteLine("Parallel Analysis Started...\n");
+            _logger.LogInformation("Parallel Analysis Started...LOgeinnnn\n");
 
-            foreach (var analyzer in _analyzers)
+            try
             {
-                analyzer.Analyze(countries);
+                foreach (var analyzer in _analyzers)
+                {
+                    _logger.LogInformation($"Running analyzer: {analyzer.GetType().Name}");
+                    analyzer.Analyze(countries);
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogInformation($"[ERROR] Analyzer execution failed: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+            }
+
 
         }
     }

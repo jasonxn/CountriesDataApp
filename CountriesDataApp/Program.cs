@@ -10,10 +10,18 @@ using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Country Analysis Service
+// Register analysis service
 builder.Services.AddScoped<ICountryAnalysisService, CountryAnalysisService>();
+
+
+
+// Register analyzers
 builder.Services.AddScoped<ICountryAnalyzer, RegionCountAnalyzer>();
-builder.Services.AddScoped<ICountryAnalyzer>(sp => new PopulationAnalyzer(100_000_000));
+builder.Services.AddScoped<ICountryAnalyzer, PopulationAnalyzer>();
+
+
+
+
 
 
 // DbContext registration

@@ -48,7 +48,7 @@ namespace CountriesDataApp.Controllers
         public IActionResult Error()
              => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 
-
+        /*
         [Route("analyze")]
         public class AnalyzeController : Controller
         {
@@ -66,7 +66,7 @@ namespace CountriesDataApp.Controllers
                 return Ok("Analysis done. Check server console.");
             }
         }
-
+        */
 
 
     }
