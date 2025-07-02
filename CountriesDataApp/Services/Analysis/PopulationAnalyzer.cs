@@ -20,24 +20,16 @@ namespace CountriesDataApp.Services.Analysis
 
         public void Analyze(IEnumerable<Country> countries)
         {
-            var highPopCountries = new ConcurrentBag<Country>();
+            var highPopCountries = countries
+             .AsParallel()
+                .Where(c => c.Population > _threshold)
+              .ToList();
 
-            Parallel.ForEach(countries, country =>
-            {
-                if (country.Population > _threshold)
-                {
-                    highPopCountries.Add(country);
-                }
-            });
-
-            Console.WriteLine($"Total countries fetched: {countries.Count()}");
             _logger.LogInformation("=== Countries with population >= {Threshold:N0} ===", _threshold);
 
-            Console.WriteLine($"\nCountries with population > {_threshold:N0}:");
 
             foreach (var country in highPopCountries.OrderByDescending(c => c.Population))
             {
-                Console.WriteLine($" - {country.CommonName} ({country.Population:N0})");
                 _logger.LogInformation(" - {Country} ({Population:N0})", country.CommonName, country.Population);
             }
 

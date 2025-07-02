@@ -21,16 +21,12 @@ namespace CountriesDataApp.Services
 
         public async Task<List<Country>> RefreshCountriesAsync(CancellationToken cancellationToken = default)
         {
-            // 1. Fetch DTOs from API
             var dtos = await _client.GetAllCountriesAsync(cancellationToken);
 
-            // 2. Map to Entities
             var entities = dtos.ToEntityList();
 
-            // 3. Persist to database (you may clear old data first if desired)
             await _repository.AddRangeAsync(entities, cancellationToken);
 
-            // 4. Return saved data
             return entities.ToList();
         }
 

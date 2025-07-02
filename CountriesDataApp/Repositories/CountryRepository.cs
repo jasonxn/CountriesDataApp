@@ -19,7 +19,7 @@ namespace CountriesDataApp.Repositories
         }
         public async Task AddRangeAsync(IEnumerable<Country> countries, CancellationToken cancellationToken = default)
         {
-            // Remove existing data (avoid duplicates)
+            // Remove existing data 
             _context.Countries.RemoveRange(_context.Countries);
             await _context.Countries.AddRangeAsync(countries, cancellationToken).ConfigureAwait(false);
             await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

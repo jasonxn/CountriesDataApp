@@ -21,6 +21,8 @@ builder.Services.AddScoped<ICountryAnalyzer, PopulationAnalyzer>();
 
 
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 
 

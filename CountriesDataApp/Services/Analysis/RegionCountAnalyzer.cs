@@ -21,13 +21,13 @@ namespace CountriesDataApp.Services.Analysis
                 .AsParallel()
                 .GroupBy(c => c.Region ?? "Unknown")
                 .Select(g => new
-                { Region = g.Key?? "Unkown", Count = g.Count() })
+                { Region = g.Key, Count = g.Count() })
                 .ToList();
 
-            Console.WriteLine("Countries by Region:");
+            _logger.LogInformation("Country counts by Region");
+
             foreach (var region in regionCounts)
             {
-                Console.WriteLine($" - {region.Region}: {region.Count} countries");
                 _logger.LogInformation(" - {Region}: {Count} countries", region.Region, region.Count);
 
             }
